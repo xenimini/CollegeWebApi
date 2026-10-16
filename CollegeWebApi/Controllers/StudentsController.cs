@@ -16,16 +16,19 @@ public class StudentsController : ControllerBase
         _repo = new StudentRepository(connectionString);
     }
 
-    [HttpGet]
-    public IActionResult GetAll()
+    [HttpGet("all")]
+    public IActionResult GetAllForView()
     {
         var students = _repo.GetAll();
         return Ok(students);
     }
 
-    [HttpGet("hello")]
-    public IActionResult Hello()
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
     {
-        return Ok("Привет из ASP.NET Core Web API! Урок 12 выполнен.");
+        var student = _repo.GetAll().FirstOrDefault(s => s.Id == id);
+        if (student == null)
+            return NotFound("Студент не найден");
+        return Ok(student);
     }
 }

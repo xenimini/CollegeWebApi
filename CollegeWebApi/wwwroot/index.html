@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>CollegeDB</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+            background: #1e1e1e;
+            color: #eee;
+        }
+
+        h1 {
+            color: #4ec9b0;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #0e639c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background: #1177bb;
+            }
+
+        #result {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            background: #252526;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CollegeDB — Студенты и группы</h1>
+    <button onclick="loadStudents()">Показать всех студентов</button>
+    <button onclick="loadGroups()">Показать все группы</button>
+    <div id="result">Нажми кнопку...</div>
+    <button onclick="loadAll()">students/all</button>
+    <input type="number" id="studentId" placeholder="ID студента" style="padding:8px;">
+    <button onclick="loadById()">student/id</button>
+    <script>
+        async function loadStudents() {
+            const response = await fetch('/api/Students');
+            const data = await response.json();
+            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function loadGroups() {
+            const response = await fetch('/groups');
+            const text = await response.text();
+            document.getElementById('result').textContent = text;
+        }
+        async function loadAll() {
+            const response = await fetch('/api/Students/all');
+            const data = await response.json();
+            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function loadById() {
+            const id = document.getElementById('studentId').value;
+            if (!id) return alert('Введи ID');
+            const response = await fetch(`/api/Students/${id}`);
+            const data = await response.json();
+            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
