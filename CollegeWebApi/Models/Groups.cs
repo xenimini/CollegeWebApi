@@ -1,5 +1,4 @@
-﻿namespace CollegeConsole.Models;
-
+﻿namespace CollegeWebApi.Models;
 public class Group
 {
     public int Id { get; set; }

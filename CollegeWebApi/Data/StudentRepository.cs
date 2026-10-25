@@ -1,8 +1,8 @@
-﻿using CollegeConsole.Models;
+﻿using CollegeWebApi.Models;
 using Dapper;
 using Microsoft.Data.SqlClient;
 
-namespace CollegeConsole.Data;
+namespace CollegeWebApi.Data;
 
 public class StudentRepository
 {

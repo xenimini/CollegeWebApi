@@ -1,5 +1,5 @@
-﻿using CollegeConsole.Data;   // или твой namespace, если другой
-using CollegeConsole.Models;
+﻿using CollegeWebApi.Data;   // или твой namespace, если другой
+using CollegeWebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CollegeWebApi.Controllers;
