@@ -31,4 +31,25 @@ public class StudentsController : ControllerBase
             return NotFound("Студент не найден");
         return Ok(student);
     }
+    [HttpPost]
+    public IActionResult Create([FromBody] Student student)
+    {
+        int newId = _repo.Create(student);
+        return Ok(new { Id = newId, Message = "Студент создан" });
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, [FromBody] Student student)
+    {
+        student.Id = id;
+        _repo.Update(student);
+        return Ok("Студент обновлён");
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _repo.Delete(id);
+        return Ok("Студент удалён");
+    }
 }

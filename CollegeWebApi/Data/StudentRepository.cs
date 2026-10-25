@@ -78,4 +78,29 @@ public class StudentRepository
 
         return connection.QuerySingle<int>(sql, student);
     }
+    public int Create(Student student)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        string sql = @"
+        INSERT INTO Students (FirstName, LastName, Age, GroupId)
+        OUTPUT INSERTED.Id
+        VALUES (@FirstName, @LastName, @Age, @GroupId)";
+        return connection.QuerySingle<int>(sql, student);
+    }
+
+    public void Update(Student student)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        string sql = @"
+        UPDATE Students 
+        SET FirstName = @FirstName, LastName = @LastName, Age = @Age, GroupId = @GroupId
+        WHERE Id = @Id";
+        connection.Execute(sql, student);
+    }
+
+    public void Delete(int id)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        connection.Execute("DELETE FROM Students WHERE Id = @Id", new { Id = id });
+    }
 }
