@@ -1,8 +1,11 @@
-﻿namespace CollegeWebApi.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CollegeWebApi.Models;
+
 public class Group
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
 
-    public override string ToString() => $"{Id} | {Name}";
+    [Column("Name")]
+    public string Name { get; set; } = string.Empty;
 }

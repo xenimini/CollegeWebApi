@@ -4,119 +4,286 @@
     <meta charset="UTF-8">
     <title>CollegeDB</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial;
-            margin: 40px;
-            background: #1e1e1e;
-            color: #eee;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #2a2420 0%, #1e1a17 50%, #2c241c 100%);
+            min-height: 100vh;
+            padding: 30px;
+            color: #f5e6d3;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
         h1 {
-            color: #4ec9b0;
+            text-align: center;
+            font-size: 2.6rem;
+            background: linear-gradient(90deg, #ffb347, #ff8c42, #ff6b35, #ff9a56);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            font-weight: 600;
         }
 
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            background: #0e639c;
-            color: white;
+        .card {
+            background: rgba(40, 35, 30, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 140, 66, 0.25);
+        }
+
+        h2 {
+            color: #ffb347;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        input {
+            padding: 12px 16px;
             border: none;
+            border-radius: 12px;
+            background: #3a322c;
+            color: #f5e6d3;
+            font-size: 15px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+            input::placeholder {
+                color: #a89080;
+            }
+
+            input:focus {
+                outline: 2px solid #ff8c42;
+            }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
             cursor: pointer;
+            font-weight: 500;
+            color: #2a1f16;
         }
 
             button:hover {
-                background: #1177bb;
+                transform: translateY(-2px);
             }
 
-        #result {
-            margin-top: 20px;
-            white-space: pre-wrap;
-            background: #252526;
-            padding: 15px;
-            border-radius: 5px;
+        .btn-add {
+            background: linear-gradient(135deg, #ffb347, #ff8c42);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ff6b35, #e85d04);
+            color: white;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-load {
+            background: linear-gradient(135deg, #ffb347, #ffa94d);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: linear-gradient(90deg, #ff8c42, #ff9a56, #ffb347);
+            padding: 12px;
+            text-align: left;
+            color: #2a1f16;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255, 140, 66, 0.2);
+        }
+
+        tr:hover {
+            background: rgba(255, 140, 66, 0.08);
         }
     </style>
 </head>
 <body>
-    <h1>CollegeDB — Студенты и группы</h1>
-    <button onclick="loadStudents()">Показать всех студентов</button>
-    <button onclick="loadGroups()">Показать все группы</button>
-    <h3>Создать студента</h3>
-    <input id="firstName" placeholder="Имя">
-    <input id="lastName" placeholder="Фамилия">
-    <input id="age" type="number" placeholder="Возраст">
-    <input id="groupId" type="number" placeholder="GroupId">
-    <button onclick="createStudent()">Создать</button>
+    <div class="container">
+        <h1>CollegeDB</h1>
 
-    <h3>Обновить студента</h3>
-    <input id="editId" type="number" placeholder="Id">
-    <input id="editFirstName" placeholder="Имя">
-    <input id="editLastName" placeholder="Фамилия">
-    <input id="editAge" type="number" placeholder="Возраст">
-    <input id="editGroupId" type="number" placeholder="GroupId">
-    <button onclick="updateStudent()">Обновить</button>
+        <!-- Студенты -->
+        <div class="card">
+            <h2>Студенты</h2>
+            <div class="form-row">
+                <input id="sFirst" placeholder="Имя">
+                <input id="sLast" placeholder="Фамилия">
+                <input id="sAge" type="number" placeholder="Возраст">
+                <input id="sGroup" type="number" placeholder="ID группы">
+                <button class="btn-add" onclick="addStudent()">Добавить</button>
+            </div>
+            <button class="btn-load" onclick="loadStudents()">Обновить</button>
+            <div id="students"></div>
+        </div>
 
-    <h3>Удалить студента</h3>
-    <input id="deleteId" type="number" placeholder="Id">
-    <button onclick="deleteStudent()">Удалить</button>
+        <!-- Группы -->
+        <div class="card">
+            <h2>Группы</h2>
+            <div class="form-row">
+                <input id="gName" placeholder="Название группы">
+                <button class="btn-add" onclick="addGroup()">Добавить</button>
+            </div>
+            <button class="btn-load" onclick="loadGroups()">Обновить</button>
+            <div id="groups"></div>
+        </div>
 
-    <br><br>
-    <button onclick="loadStudents()">Показать всех</button>
-    <div id="result">Нажми кнопку...</div>
-    <button onclick="loadAll()">students/all</button>
-    <input type="number" id="studentId" placeholder="ID студента" style="padding:8px;">
-    <button onclick="loadById()">student/id</button>
+        <!-- Учителя -->
+        <div class="card">
+            <h2>Учителя</h2>
+            <div class="form-row">
+                <input id="tFirst" placeholder="Имя">
+                <input id="tLast" placeholder="Фамилия">
+                <button class="btn-add" onclick="addTeacher()">Добавить</button>
+            </div>
+            <button class="btn-load" onclick="loadTeachers()">Обновить</button>
+            <div id="teachers"></div>
+        </div>
+
+        <!-- Предметы -->
+        <div class="card">
+            <h2>Предметы</h2>
+            <div class="form-row">
+                <input id="subName" placeholder="Название предмета">
+                <input id="subTeacher" type="number" placeholder="ID учителя">
+                <button class="btn-add" onclick="addSubject()">Добавить</button>
+            </div>
+            <button class="btn-load" onclick="loadSubjects()">Обновить</button>
+            <div id="subjects"></div>
+        </div>
+
+        <!-- Оценки -->
+        <div class="card">
+            <h2>Оценки</h2>
+            <div class="form-row">
+                <input id="grStudent" type="number" placeholder="ID студента">
+                <input id="grSubject" type="number" placeholder="ID предмета">
+                <input id="grScore" type="number" placeholder="Оценка">
+                <button class="btn-add" onclick="addGrade()">Добавить</button>
+            </div>
+            <button class="btn-load" onclick="loadGrades()">Обновить</button>
+            <div id="grades"></div>
+        </div>
+    </div>
+
     <script>
+        const api = (url, opts) => fetch(url, opts).then(r => r.json());
+
         async function loadStudents() {
-            const response = await fetch('/api/Students');
-            const data = await response.json();
-            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            const data = await api('/students/all');
+            document.getElementById('students').innerHTML = table(data, ['id', 'firstName', 'lastName', 'age', 'groupId'],
+                s => `<button class="btn-delete" onclick="del('/students/${s.id}', loadStudents)">Удалить</button>`);
         }
-
-        async function createStudent() {
-            const student = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                age: parseInt(document.getElementById('age').value),
-                groupId: parseInt(document.getElementById('groupId').value) || null
-            };
-
-            const response = await fetch('/api/Students', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(student)
+        async function addStudent() {
+            await fetch('/students/add', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    firstName: val('sFirst'), lastName: val('sLast'),
+                    age: +val('sAge'), groupId: +val('sGroup') || null
+                })
             });
-            const result = await response.json();
-            alert('Создан студент с Id = ' + result.id);
-            loadStudents();
+            clear('sFirst', 'sLast', 'sAge', 'sGroup'); loadStudents();
         }
 
-        async function updateStudent() {
-            const id = document.getElementById('editId').value;
-            const student = {
-                firstName: document.getElementById('editFirstName').value,
-                lastName: document.getElementById('editLastName').value,
-                age: parseInt(document.getElementById('editAge').value),
-                groupId: parseInt(document.getElementById('editGroupId').value) || null
-            };
-
-            await fetch(`/api/Students/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(student)
+        async function loadGroups() {
+            const data = await api('/groups/all');
+            document.getElementById('groups').innerHTML = table(data, ['id', 'name'],
+                g => `<button class="btn-delete" onclick="del('/groups/${g.id}', loadGroups)">Удалить</button>`);
+        }
+        async function addGroup() {
+            await fetch('/groups/add', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: val('gName') })
             });
-            alert('Обновлено');
-            loadStudents();
+            clear('gName'); loadGroups();
         }
 
-        async function deleteStudent() {
-            const id = document.getElementById('deleteId').value;
-            if (!confirm('Удалить студента ' + id + '?')) return;
-
-            await fetch(`/api/Students/${id}`, { method: 'DELETE' });
-            alert('Удалено');
-            loadStudents();
+        async function loadTeachers() {
+            const data = await api('/teachers/all');
+            document.getElementById('teachers').innerHTML = table(data, ['id', 'firstName', 'lastName'],
+                t => `<button class="btn-delete" onclick="del('/teachers/${t.id}', loadTeachers)">Удалить</button>`);
         }
+        async function addTeacher() {
+            await fetch('/teachers/add', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ firstName: val('tFirst'), lastName: val('tLast') })
+            });
+            clear('tFirst', 'tLast'); loadTeachers();
+        }
+
+        async function loadSubjects() {
+            const data = await api('/subjects/all');
+            document.getElementById('subjects').innerHTML = table(data, ['id', 'name', 'teacherId'],
+                s => `<button class="btn-delete" onclick="del('/subjects/${s.id}', loadSubjects)">Удалить</button>`);
+        }
+        async function addSubject() {
+            await fetch('/subjects/add', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: val('subName'), teacherId: +val('subTeacher') || null })
+            });
+            clear('subName', 'subTeacher'); loadSubjects();
+        }
+
+        async function loadGrades() {
+            const data = await api('/grades/all');
+            document.getElementById('grades').innerHTML = table(data, ['id', 'studentId', 'subjectId', 'score', 'gradeDate'],
+                g => `<button class="btn-delete" onclick="del('/grades/${g.id}', loadGrades)">Удалить</button>`);
+        }
+        async function addGrade() {
+            await fetch('/grades/add', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    studentId: +val('grStudent'), subjectId: +val('grSubject'), score: +val('grScore')
+                })
+            });
+            clear('grStudent', 'grSubject', 'grScore'); loadGrades();
+        }
+
+        function table(data, cols, actions) {
+            if (!data.length) return '<p>Пусто</p>';
+            let h = '<table><tr>' + cols.map(c => `<th>${c}</th>`).join('') + '<th></th></tr>';
+            data.forEach(row => {
+                h += '<tr>' + cols.map(c => `<td>${row[c] ?? '—'}</td>`).join('') + `<td>${actions(row)}</td></tr>`;
+            });
+            return h + '</table>';
+        }
+        function val(id) { return document.getElementById(id).value; }
+        function clear(...ids) { ids.forEach(id => document.getElementById(id).value = ''); }
+        async function del(url, reload) {
+            if (!confirm('Удалить?')) return;
+            await fetch(url, { method: 'DELETE' });
+            reload();
+        }
+
+        loadStudents(); loadGroups(); loadTeachers(); loadSubjects(); loadGrades();
     </script>
 </body>
 </html>
