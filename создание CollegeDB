@@ -1,10 +1,10 @@
-### Как создать базу CollegeDB
+Как создать базу CollegeDB
 
-1. Открой **SQL Server Management Studio (SSMS)**.
-2. Подключись к серверу `localhost\SQLEXPRESS` (Windows Authentication).
-3. Нажми **Создать запрос**.
+1. Открой SQL Server Management Studio (SSMS).
+2. Подключись к серверу localhost\SQLEXPRESS (Windows Authentication).
+3. Нажми Создать запрос.
 4. Вставь полный SQL-скрипт (который ниже).
-5. Нажми **Выполнить** (F5).
+5. Нажми Выполнить (F5).
 
 После выполнения база `CollegeDB` будет создана со всеми таблицами и тестовыми данными.
 
