@@ -9,7 +9,7 @@ https://github.com/xenimini/CollegeDB-ADO.NET
 
 ## Как запустить
 
-1. Убедись, что запущен SQL Server Express и существует база `CollegeDB`.
+1. Убедись, что запущен SQL Server Express и существует база `CollegeDB`(у меня есть дополнительный файл в котором можно посмотреть как создать базу)
 2. Открой решение в Visual Studio.
 3. Нажми **F5**.
 
