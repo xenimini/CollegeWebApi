@@ -1,0 +1,146 @@
+### Как создать базу CollegeDB
+
+1. Открой **SQL Server Management Studio (SSMS)**.
+2. Подключись к серверу `localhost\SQLEXPRESS` (Windows Authentication).
+3. Нажми **Создать запрос**.
+4. Вставь полный SQL-скрипт (который ниже).
+5. Нажми **Выполнить** (F5).
+
+После выполнения база `CollegeDB` будет создана со всеми таблицами и тестовыми данными.
+
+
+
+
+-- Удаляем старую базу, если есть
+IF DB_ID('CollegeDB') IS NOT NULL
+BEGIN
+    ALTER DATABASE CollegeDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE CollegeDB;
+END
+GO
+
+CREATE DATABASE CollegeDB;
+GO
+
+USE CollegeDB;
+GO
+
+-- Группы
+CREATE TABLE Groups (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL
+);
+
+-- Студенты
+CREATE TABLE Students (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    FirstName NVARCHAR(50) NOT NULL,
+    LastName NVARCHAR(50) NOT NULL,
+    Age INT NULL,
+    GroupId INT NULL,
+    CONSTRAINT FK_Students_Groups FOREIGN KEY (GroupId) REFERENCES Groups(Id)
+);
+
+-- Преподаватели
+CREATE TABLE Teachers (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    FirstName NVARCHAR(50) NOT NULL,
+    LastName NVARCHAR(50) NOT NULL
+);
+
+-- Предметы
+CREATE TABLE Subjects (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    TeacherId INT NULL,
+    CONSTRAINT FK_Subjects_Teachers FOREIGN KEY (TeacherId) REFERENCES Teachers(Id)
+);
+
+-- Оценки
+CREATE TABLE Grades (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    StudentId INT NOT NULL,
+    SubjectId INT NOT NULL,
+    Score INT NOT NULL,
+    GradeDate DATE NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT FK_Grades_Students FOREIGN KEY (StudentId) REFERENCES Students(Id),
+    CONSTRAINT FK_Grades_Subjects FOREIGN KEY (SubjectId) REFERENCES Subjects(Id)
+);
+GO
+
+-- ===== Данные =====
+
+INSERT INTO Groups (Name) VALUES 
+('Программисты'),
+('Дизайнеры'),
+('Маркетологи');
+
+INSERT INTO Teachers (FirstName, LastName) VALUES 
+('Андрей', 'Волков'),
+('Екатерина', 'Соколова'),
+('Дмитрий', 'Лебедев'),
+('Анна', 'Козлова'),
+('Сергей', 'Новиков');
+
+INSERT INTO Subjects (Name, TeacherId) VALUES 
+('Программирование', 1),
+('Базы данных', 1),
+('Веб-разработка', 2),
+('Дизайн интерфейсов', 3),
+('Маркетинг', 4),
+('Аналитика данных', 4),
+('Графический дизайн', 5);
+
+INSERT INTO Students (FirstName, LastName, Age, GroupId) VALUES 
+('Ксения', 'Адаменко', 19, 3),
+('Никита', 'Адаменко', 19, 1),
+('Михаил', 'Искра', 18, 1),
+('Алина', 'Морозова', 18, 1),
+('Игорь', 'Павлов', 20, 2),
+('Виктория', 'Семенова', 17, 3),
+('Роман', 'Федоров', 19, 1),
+('Дарья', 'Николаева', 16, 2),
+('Артём', 'Орлов', 20, 3),
+('София', 'Егорова', 18, 1),
+('Кирилл', 'Макаров', 17, 2),
+('Полина', 'Андреева', 19, 3),
+('Максим', 'Захаров', 16, 1),
+('Елизавета', 'Соловьева', 20, 2),
+('Денис', 'Борисов', 18, 3),
+('Мария', 'Киселева', 17, 1),
+('Александр', 'Григорьев', 19, 2),
+('Ангелина', 'Титова', 16, 3),
+('Владислав', 'Комаров', 20, 1),
+('Кристина', 'Белова', 18, 2),
+('Егор', 'Медведев', 17, 3),
+('Валерия', 'Антонова', 19, 1),
+('Тимофей', 'Савельев', 16, 2);
+
+-- Оценки
+INSERT INTO Grades (StudentId, SubjectId, Score) VALUES
+(1,5,5),(1,6,4),
+(2,1,5),(2,2,4),(2,3,5),
+(3,1,4),(3,2,5),
+(4,1,3),(4,3,4),
+(5,4,5),(5,7,4),
+(6,5,4),(6,6,5),
+(7,1,5),(7,2,4),
+(8,4,4),(8,7,5),
+(9,5,3),(9,6,4),
+(10,1,4),(10,3,5),
+(11,4,5),(11,7,4),
+(12,5,4),(12,6,5),
+(13,1,5),(13,2,3),
+(14,4,4),(14,7,5),
+(15,5,3),(15,6,4),
+(16,1,4),(16,3,5),
+(17,4,5),(17,7,4),
+(18,5,5),(18,6,4),
+(19,1,3),(19,2,4),
+(20,4,4),(20,7,5),
+(21,5,4),(21,6,3),
+(22,1,5),(22,3,4),
+(23,2,4),(23,1,5);
+GO
+
+PRINT 'База CollegeDB успешно создана и заполнена';
